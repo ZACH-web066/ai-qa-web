@@ -1,0 +1,194 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+body{
+    background-color: #f3f7fc;
+    padding:30px 15px;
+}
+.page-wrap{
+    max-width: 800px;
+    margin:0 auto;
+}
+.container {
+  background: rgba(255, 255, 255, 0.45); /* 透明度从0.88降到0.65，明显透出背景 */
+  backdrop-filter: blur(10px);            /* 毛玻璃模糊，透但不花 */
+  -webkit-backdrop-filter: blur(10px);    /* 兼容 */
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* 里面的小卡片（AI拓展区）也同步调 */
+.ai-container {
+  background: rgba(255, 255, 255, 0.35); 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+h1{
+    text-align:center;
+    color:#1f3b64;
+    font-size:26px;
+    margin-bottom:8px;
+}
+.subtitle{
+    text-align:center;
+    color:#667894;
+    margin-bottom:18px;
+}
+h2{
+    text-align:center;
+    color:#1f3b64;
+    font-size:22px;
+    margin-bottom:8px;
+}
+.ai-tip{
+    text-align:center;
+    color:#667894;
+    font-size:14px;
+    margin-bottom:18px;
+}
+
+/* 分类标签样式 */
+.tab-group{
+    display:flex;
+    gap:12px;
+    margin-bottom:14px;
+}
+.tab{
+    padding:8px 20px;
+    border-radius: 8px;
+    background:#e8f0fe;
+    color:#3b5b92;
+    cursor:pointer;
+    transition:0.2s;
+}
+.tab.active{
+    background:#2563eb;
+    color:white;
+}
+
+/* 热门知识点按钮 */
+#hotBox{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:16px;
+}
+.hot-btn{
+    padding:7px 12px;
+    border-radius:6px;
+    border:1px solid #b4c8e8;
+    background:#f0f5ff;
+    cursor:pointer;
+    transition:0.2s;
+}
+.hot-btn:hover{
+    background:#d8e7ff;
+}
+
+textarea,input[type="text"]{
+    width:100%;
+    border:1px solid #cad8ee;
+    border-radius:10px;
+    padding:14px;
+    font-size:16px;
+    outline:none;
+}
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+input[type="text"]{
+    height:52px;
+}
+textarea:focus,input:focus{
+    border-color:#2563eb;
+}
+
+.btn-group{
+    display:flex;
+    gap:14px;
+    margin:16px 0;
+}
+.search-btn{
+    flex:1;
+    height:48px;
+    border-radius:10px;
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+.search-btn:hover{
+    background:#1d4fc4;
+}
+.clear-btn{
+    flex:1;
+    height:48px;
+    border-radius:10px;
+    border:1px solid #b9c9e4;
+    background:#f7f9fc;
+    color:#333;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+.clear-btn:hover{
+    background:#e9eef7;
+}
+
+.result-box,.ai-result-box{
+    width:100%;
+    min-height:120px;
+    padding:14px;
+    border-radius:10px;
+    background:#f7f9fc;
+    border:1px solid #e1e8f3;
+    white-space: pre-line;
+    line-height:1.6;
+}
+/* 学习资料区样式 */
+#resourceArea{
+    display:none;
+}
+.resource-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px;
+    margin-bottom:12px;
+    background:#f7f9fc;
+    border:1px solid #e1e8f3;
+    border-radius:10px;
+    text-decoration:none;
+    color:#1f3b64;
+    transition:0.2s;
+}
+.resource-item:hover{
+    background:#e8f0fe;
+    border-color:#2563eb;
+    box-shadow:0 2px 8px rgba(37,99,235,0.1);
+}
+.res-icon{
+    font-size:32px;
+    flex-shrink:0;
+}
+.res-title{
+    font-weight:bold;
+    font-size:15px;
+    margin-bottom:4px;
+}
+.res-desc{
+    font-size:13px;
+    color:#667894;
+}

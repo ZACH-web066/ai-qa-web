@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程知识智能答疑工具</title>
+    <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+body{
+  background-image: url('bj-shinkai2.jpg');
+  background-size: 120% auto;
+  background-position: center;       
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding:30px 15px;
+}
+.page-wrap{
+    max-width: 800px;
+    margin:0 auto;
+}
+.container, .ai-container{
+  background: rgba(255, 255, 255, 0.88); /* 蓝白云图偏亮，透明度拉到0.88 */
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+  padding:28px;
+  margin-bottom:24px;
+}
+h1{
+    text-align:center;
+    color:#1f3b64;
+    font-size:26px;
+    margin-bottom:8px;
+}
+.subtitle{
+    text-align:center;
+    color:#667894;
+    margin-bottom:18px;
+}
+h2{
+    text-align:center;
+    color:#1f3b64;
+    font-size:22px;
+    margin-bottom:8px;
+}
+.ai-tip{
+    text-align:center;
+    color:#667894;
+    font-size:14px;
+    margin-bottom:18px;
+}
+
+.tab-group{
+    display:flex;
+    gap:12px;
+    margin-bottom:14px;
+}
+.tab{
+    padding:8px 20px;
+    border-radius: 8px;
+    background:#e8f0fe;
+    color:#3b5b92;
+    cursor:pointer;
+    transition:0.2s;
+}
+.tab.active{
+    background:#2563eb;
+    color:white;
+}
+
+#hotBox{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:16px;
+}
+.hot-btn{
+    padding:7px 12px;
+    border-radius:6px;
+    border:1px solid #b4c8e8;
+    background:#f0f5ff;
+    cursor:pointer;
+    transition:0.2s;
+}
+.hot-btn:hover{
+    background:#d8e7ff;
+}
+
+textarea,input[type="text"]{
+    width:100%;
+    border:1px solid #cad8ee;
+    border-radius:10px;
+    padding:14px;
+    font-size:16px;
+    outline:none;
+}
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+input[type="text"]{
+    height:52px;
+}
+textarea:focus,input:focus{
+    border-color:#2563eb;
+}
+
+.btn-group{
+    display:flex;
+    gap:14px;
+    margin:16px 0;
+}
+.search-btn{
+    flex:1;
+    height:48px;
+    border-radius:10px;
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+.search-btn:hover{
+    background:#1d4fc4;
+}
+.clear-btn{
+    flex:1;
+    height:48px;
+    border-radius:10px;
+    border:1px solid #b9c9e4;
+    background:#f7f9fc;
+    color:#333;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+.clear-btn:hover{
+    background:#e9eef7;
+}
+
+.result-box,.ai-result-box{
+    width:100%;
+    min-height:120px;
+    padding:14px;
+    border-radius:10px;
+    background:#f7f9fc;
+    border:1px solid #e1e8f3;
+    white-space: pre-line;
+    line-height:1.6;
+}
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <!-- ========== 上方：课程知识智能答疑【卡片A】 ========== -->
+        <div class="container">
+            <h1>课程知识智能答疑工具</h1>
+            <p class="subtitle">大一课程知识点检索平台</p >
+
+            <div class="tab-group">
+                <div class="tab active" data-type="c">C语言</div>
+                <div class="tab" data-type="politics">思政</div>
+                <div class="tab" data-type="resource">学习资料</div>
+            </div>
+            <div id="queryArea">
+            <div id="hotBox"></div>
+
+            <textarea id="question" placeholder="请输入知识点，例如：变量、printf、主要矛盾"></textarea>
+            
+            <div class="btn-group">
+                <button onclick="searchAnswer()" class="search-btn">查询知识点</button>
+                <button onclick="clearAll()" class="clear-btn">清空</button>
+            </div>
+
+            <div id="result" class="result-box">在这里显示知识点答案</div>
+        </div>
+        <div id="resourceArea" style="display:none;">
+    <h2 style="margin-bottom:16px;color:#2563eb;">📚 学习资料推荐</h2>
+    
+    <!-- 资料卡片1 -->
+    <div style="background:#f8faff;padding:16px;border-radius:12px;margin-bottom:14px;border-left:4px solid #2563eb;">
+        <h3 style="margin:0 0 8px;color:#1e40af;">C语言基础入门</h3>
+        <p style="margin:0 0 10px;color:#555;font-size:14px;">B站经典教程,适合零基础</p >
+        <a href=" https://www.bilibili.com/video/BV1dr4y1n7vA/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:14px;">▶ 点击观看</a >
+    </div>
+    
+    <!-- 资料卡片2 -->
+    <div style="background:#f8faff;padding:16px;border-radius:12px;margin-bottom:14px;border-left:4px solid #2563eb;">
+        <h3 style="margin:0 0 8px;color:#1e40af;">思政核心考点</h3>
+        <p style="margin:0 0 10px;color:#555;font-size:14px;">大一思政重点梳理</p >
+        <a href="https://www.bilibili.com/video/BV1GFB6BFExW/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:14px;">▶ 点击观看</a >
+    </div>
+</div>
+        <!-- ========== 下方：AI拓展答疑【卡片B】 ========== -->
+        <div class="ai-container">
+            <h2>AI拓展答疑（火山方舟大模型）</h2>
+            <p class="ai-tip">知识库没有收录的拓展问题，可以在此提问</p >
+
+            <input type="text" id="aiInput" placeholder="输入拓展知识点问题">
+            
+            <div class="btn-group">
+                <button onclick="sendAiQuestion()" class="search-btn">AI提问</button>
+                <button onclick="clearAi()" class="clear-btn">清空AI</button>
+            </div>
+
+            <div id="aiResult" class="ai-result-box">AI：你可以向我提问大一C语言或者思政相关知识点，优先检索本地知识库</div>
+        </div>
+    </div>
+
+<script>
+// 大一知识库：C语言 + 思政
+const allData = {
+    c: [
+        {q:"变量",a:"变量是内存中用来存放数据的空间，使用前必须声明数据类型。"},
+        {q:"常量",a:"常量的值在程序运行期间不能修改，可用const或者宏定义#define声明。"},
+        {q:"printf",a:"printf是C语言标准输出函数，用于向控制台打印信息。"},
+        {q:"scanf",a:"scanf是C语言输入函数，用来读取用户从键盘输入的数据。"},
+        {q:"数组",a:"数组是相同类型数据的有序集合，可以一次性存储多个同类型变量。"},
+        {q:"char",a:"char是字符型，占用1字节，存储字符对应的ASCII码。"},
+        {q:"int",a:"int是整型，一般占用4字节，用来存储整数。"},
+        {q:"float",a:"float是单精度浮点型，占用4字节，存储小数，精度约6~7位有效数字。"},
+        {q:"double",a:"double是双精度浮点型，占用8字节，存储小数，精度更高。"},
+        {q:"if",a:"if是条件判断语句，满足括号内条件才执行对应的代码块。"},
+        {q:"else",a:"else搭配if使用，if条件不成立的时候，执行else里的代码。"},
+        {q:"else if",a:"else if用于多分支判断，依次判断多个条件，匹配成功执行对应代码。"},
+        {q:"for循环",a:"for循环用于已知循环次数的重复执行，包含初始化、条件、增量三部分。"},
+        {q:"while",a:"while循环先判断条件，条件成立则不断执行循环体，适合未知循环次数场景。"},
+        {q:"do while",a:"do while循环先执行一次循环体，再判断条件，至少执行1次。"},
+        {q:"break",a:"break可以直接跳出当前循环或者switch语句，终止循环。"},
+        {q:"continue",a:"continue跳过本次循环剩下代码，直接进入下一轮循环判断。"},
+        {q:"函数",a:"C语言函数是一段封装好的可复用代码，完成特定功能，main是程序入口函数。"},
+        {q:"main",a:"main函数是C语言程序唯一入口，程序从main函数开始运行。"},
+        {q:"指针",a:"指针存储内存地址，可以间接访问对应内存里的数据。"},
+        {q:"ASCII",a:"ASCII是字符编码表，每个字符对应一个数字，char本质存储的就是ASCII码。"},
+        {q:"运算符",a:"运算符用于数据运算，分为算术、关系、逻辑、赋值运算符。"},
+        {q:"逻辑与",a:"逻辑与&&，两边条件全部为真，整体结果才为真。"},
+        {q:"逻辑或",a:"逻辑或||，任意一边条件为真，整体结果就为真。"},
+        {q:"逻辑非",a:"逻辑非!，取反操作，真变假，假变真。"},
+        {q:"switch",a:"switch多分支选择语句，匹配不同的常量分支执行代码。"},
+        {q:"结构体",a:"结构体struct，可以自定义复合数据类型，组合多种不同类型变量。"},
+        {q:"预处理",a:"预处理指令以#开头，在编译之前执行，例如#include、#define。"},
+        {q:"#include",a:"#include用于引入头文件，例如stdio.h，提供printf、scanf函数声明。"},
+        {q:"#define",a:"#define宏定义，可以定义常量或者简单代码片段。"},
+        {q:"注释",a:"注释是写给人看的说明文字，单行//，多行/* */，编译器会直接忽略。"},
+        {q:"标识符",a:"标识符就是变量、函数名字，只能字母、数字、下划线，不能数字开头，区分大小写。"},
+        {q:"类型转换",a:"类型转换分为自动隐式转换和强制类型转换，把一种数据类型转为另一种。"},
+        {q:"字符串",a:"C语言字符串以'\\0'作为结束标记，一般使用char数组存放字符串。"},
+        {q:"strlen",a:"strlen函数计算字符串有效字符长度，不包含末尾'\\0'结束符。"}
+    ],
+    politics: [
+        {q:"新时代",a:"中国特色社会主义新时代，是我国发展新的历史方位。"},
+        {q:"主要矛盾",a:"我国社会主要矛盾是人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾。"},
+        {q:"中国梦",a:"中国梦就是实现中华民族伟大复兴，本质是国家富强、民族振兴、人民幸福。"},
+        {q:"四个自信",a:"四个自信：道路自信、理论自信、制度自信、文化自信。"},
+        {q:"两个确立",a:"确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位。"},
+        {q:"两个维护",a:"坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护党中央权威和集中统一领导。"},
+        {q:"新发展理念",a:"创新、协调、绿色、开放、共享。"},
+        {q:"高质量发展",a:"高质量发展是全面建设社会主义现代化国家的首要任务。"},
+        {q:"中国式现代化",a:"中国式现代化，是中国共产党领导的社会主义现代化，具有五大特征。"},
+        {q:"全过程人民民主",a:"全过程人民民主是社会主义民主政治的本质属性，是最广泛、最真实、最管用的民主。"},
+        {q:"社会主义核心价值观",a:"富强、民主、文明、和谐；自由、平等、公正、法治；爱国、敬业、诚信、友善。"},
+        {q:"一国两制",a:"一国两制即在一个中国前提下，大陆坚持社会主义制度，港澳台保持原有资本主义制度长期不变。"},
+        {q:"总体国家安全观",a:"以人民安全为宗旨，以政治安全为根本，统筹发展和安全。"},
+        {q:"人类命运共同体",a:"人类命运共同体，旨在追求本国利益时兼顾他国合理关切，共同应对全球性挑战。"},
+        {q:"脱贫攻坚",a:"我国打赢人类历史上规模最大的脱贫攻坚战，历史性解决绝对贫困问题。"},
+        {q:"共同富裕",a:"共同富裕是社会主义的本质要求，不是平均主义，是全体人民逐步富裕。"}
+    ]
+};
+const knowledgeBase = [...allData.c, ...allData.politics];
+let currentType = "c";
+
+// 渲染热门知识点按钮
+function renderHotList(){
+    const hotBox = document.getElementById("hotBox");
+    if(!hotBox){
+        console.error("找不到 hotBox！");
+        return;
+    }
+    hotBox.innerHTML = "";
+    const list = allData[currentType];
+    const hotList = list.slice(0,6);
+    hotList.forEach(item=>{
+        const btn = document.createElement("button");
+        btn.className = "hot-btn";
+        btn.innerText = item.q;
+        btn.onclick = function(){
+            document.getElementById("question").value = item.q;
+            searchAnswer();
+        }
+        hotBox.appendChild(btn);
+    })
+}
+
+// 查询知识库
+function searchAnswer(){
+    const inputText = document.getElementById("question").value.trim();
+    const resultDom = document.getElementById("result");
+    const list = allData[currentType];
+    let ans = "暂时未收录该知识点，请尝试更换关键词提问。";
+    for(let item of list){
+        if(inputText.includes(item.q)){
+            ans = item.a;
+            break;
+        }
+    }
+    resultDom.innerText = ans;
+}
+
+// 清空知识库
+function clearAll(){
+    document.getElementById("question").value = "";
+    document.getElementById("result").innerText = "在这里显示知识点答案";
+}
+
+// 标签切换绑定函数
+function bindTabEvent(){
+    const tabs = document.querySelectorAll(".tab");
+    const queryArea = document.getElementById("queryArea");
+    const resourceArea = document.getElementById("resourceArea");
+    
+    tabs.forEach(tab=>{
+        tab.onclick = function(){
+            tabs.forEach(t=>t.classList.remove("active"));
+            this.classList.add("active");
+            const type = this.dataset.type;
+            
+            if(type === "resource"){
+                queryArea.style.display = "none";
+                resourceArea.style.display = "block";
+            } else {
+                queryArea.style.display = "block";
+                resourceArea.style.display = "none";
+                currentType = type;
+                renderHotList();
+            }
+        }
+    })
+}
+
+// ========== AI拓展答疑模块 ==========
+const aiSystemPrompt = "你是大一C语言和思政知识点辅导老师，只回答大一C语言、思政相关名词解释、知识点讲解，如果用户问无关内容，请回复：我仅支持大一C语言与思政知识点答疑。回答简洁易懂，适合大学生复习。";
+
+// 本地知识库检索
+function searchKnowledge(question){
+    const q = question.toLowerCase();
+    for(let item of knowledgeBase){
+        if(item.q.toLowerCase().includes(q) || q.includes(item.q.toLowerCase())){
+            return item.a;
+        }
+    }
+    return null;
+}
+
+// AI提问主函数
+async function sendAiQuestion(){
+    // 直接取AI拓展区的输入框（按你图里的结构，若不对请在F12里确认ID）
+    const inputEl = document.querySelector('input[placeholder*="拓展"], #aiInput');
+    const question = (inputEl ? inputEl.value : "C语言结构").trim();
+    
+    // 结果区（显示超时的那个div）
+    const resultBox = document.getElementById('aiResult') || document.querySelector('div[style*="AI"] ~ div');
+    resultBox.innerText = "正在请求，请稍候...";
+    
+    try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 60000); // 60秒
+        
+        // 必须写死 5002
+        const res = await fetch("http://127.0.0.1:5002/api/chat", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({prompt: question}),
+            signal: controller.signal
+        });
+        clearTimeout(tid);
+        
+        const data = await res.json();
+        resultBox.innerText = data.content || "返回空";
+    } catch(e) {
+        resultBox.innerText = e.name==="AbortError" ? "60秒超时！" : "错误: "+e.message;
+    }
+}
+//清空AI区域
+function clearAi(){
+    document.getElementById("aiInput").value = "";
+    document.getElementById("aiResult").innerText = "AI：你可以向我提问大一C语言或者思政相关知识点，优先检索本地知识库";
+}
+
+
+//页面加载完毕，一次性初始化
+document.addEventListener('DOMContentLoaded', function(){
+    renderHotList();
+    bindTabEvent();
+})
+</script>
+</body>
+</html>
